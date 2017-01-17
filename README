@@ -1,0 +1,4 @@
+Modules:
+
+* calculator-sdk:
+	Pure c++ project, to compile it run make, to run test execute './calculator_test.a'
