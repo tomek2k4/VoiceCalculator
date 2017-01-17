@@ -8,9 +8,38 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.tomek.voicecalculator.VoiceCalculatorActivity" >
 
-    <TextView
+     <EditText
+         android:id="@+id/input"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignBottom="@+id/go"
+         android:layout_alignParentLeft="true"
+         android:layout_alignTop="@+id/go"
+         android:layout_toLeftOf="@+id/go"
+         android:ems="10"
+         android:inputType="number" />
+    
+    <Button
+        android:id="@+id/go"
+        android:text="@string/go"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" 
+        android:onClick="onClickGo"/>
+
+    <TextView
+        android:id="@+id/output"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/go"
+        android:layout_below="@+id/input"
+        android:ems="10"
+        android:inputType="textMultiLine" >
+
+        <requestFocus />
+    </TextView>
 
 </RelativeLayout>
