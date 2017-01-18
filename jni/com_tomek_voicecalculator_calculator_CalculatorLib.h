@@ -2,6 +2,8 @@
 #include <jni.h>
 /* Header for class com_tomek_voicecalculator_calculator_CalculatorLib */
 
+
+
 #ifndef _Included_com_tomek_voicecalculator_calculator_CalculatorLib
 #define _Included_com_tomek_voicecalculator_calculator_CalculatorLib
 #ifdef __cplusplus
@@ -14,6 +16,38 @@ extern "C" {
  */
 JNIEXPORT jlong JNICALL Java_com_tomek_voicecalculator_calculator_CalculatorLib_fibNR
   (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     com_tomek_voicecalculator_calculator_CalculatorLib
+ * Method:    getOutput
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_tomek_voicecalculator_calculator_CalculatorLib_getOutput
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_tomek_voicecalculator_calculator_CalculatorLib
+ * Method:    enter
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_tomek_voicecalculator_calculator_CalculatorLib_enter
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     com_tomek_voicecalculator_calculator_CalculatorLib
+ * Method:    dispose
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_tomek_voicecalculator_calculator_CalculatorLib_dispose
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_tomek_voicecalculator_calculator_CalculatorLib
+ * Method:    initialise
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_tomek_voicecalculator_calculator_CalculatorLib_initialise
+  (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }

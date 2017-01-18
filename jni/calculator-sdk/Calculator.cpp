@@ -7,7 +7,6 @@
 
 #include <sstream>
 #include <iostream>
-#include <strings.h>
 #include <stdio.h>
 #include "Calculator.h"
 
@@ -21,20 +20,18 @@ const string Calculator::VALID_OPERATIONS = "+-*";
 Calculator::Calculator():oper('0'),state(ON)
 {
 	output = new stringstream();
+	arg = new stringstream();
 	*output<<'0';
 }
 
 string Calculator::getOutput()
 {
-	//cout << "Calling getOutput()"<<endl;
 	return output->str();
 }
 
 void Calculator::enter(string expr)
 {
-	//cout << "Calling enter()"<<endl;
 	for(int k=0; k < expr.length(); k++){
-		//cout << "Enter for "<<k<<" element,which is "<<expr.at(k)<<endl;
 		enter(expr.at(k));
 	}
 }
@@ -58,15 +55,11 @@ void Calculator::enter(char c)
 
 void Calculator::enterON(char c)
 {
-	//cout << "Entering ON with c="<<c<<endl;
-	if(isdigit(c))
+	if(iswdigit(c))
 	{
-		//cout << "First char is digit"<<endl;
 		acc = new stringstream();
 		*acc<<c;
-		if(output!=NULL)
-			delete output;
-		output = new stringstream();
+		clearStream(output);
 		*output<<c;
 		state = INP;
 	}
@@ -74,8 +67,7 @@ void Calculator::enterON(char c)
 
 void Calculator::enterINP(char c)
 {
-	//cout << "Entering INP with c="<<c<<endl;
-	if(isdigit(c))
+	if(iswdigit(c))
 	{
 		*acc<<c;
 		*output<<c;
@@ -83,18 +75,10 @@ void Calculator::enterINP(char c)
 	}
 	else if(VALID_OPERATIONS.find(c)!=string::npos )
 	{
-		//cout << "c="<<c<<" is valid operator"<<endl;
 		oper = c;
-		if(output!=NULL)
-			delete output;
-		output = new stringstream();
-		//cout << "output was reinitialized"<<endl;
-		*output << acc->str() << oper;
-		//cout << "output: "<<output->str()<<endl;
-//		if(arg!=NULL)
-//			delete arg;
-		arg = new stringstream();
-		//cout << "arg was reinitialized"<<endl;
+		clearStream(output);
+		*output << acc << oper;
+		clearStream(arg);
 		*arg << 0;
 		state = OPER;
 	}
@@ -103,11 +87,10 @@ void Calculator::enterINP(char c)
 void Calculator::enterOPER(char c)
 {
 	//cout << "Entering OPER with c="<<c<<endl;
-    if (isdigit(c)) {
+    if (iswdigit(c)) {
         *arg<<c;
-		if(output!=NULL)
-			delete output;
-        output = new stringstream(arg->str());
+		clearStream(output);
+        *output << arg;
         state = OPER;
     } else if (VALID_OPERATIONS.find(c)!=string::npos) {
         state = OPER;
@@ -139,20 +122,20 @@ void Calculator::calculate()
 			break;
 	}
 
-	if(output!=NULL)
-		delete output;
-    output = new stringstream();
+	clearStream(output);
     *output << result;
-	if(acc!=NULL)
-		delete acc;
-    acc = new stringstream();
+	clearStream(acc);
     *acc << result;
-	if(arg!=NULL)
-		delete arg;
-    arg = new stringstream("0");
-
+	clearStream(arg);
+    *arg<<"0";
 }
 
+
+void Calculator::clearStream(stringstream* stream)
+{
+	stream->str( std::string() );
+	stream->clear();
+}
 
 
 /**

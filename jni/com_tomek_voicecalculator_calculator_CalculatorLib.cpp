@@ -7,7 +7,11 @@
 
 #include "com_tomek_voicecalculator_calculator_CalculatorLib.h"
 #include <android/log.h>
+#include <string>
+#include <calculator-sdk/Calculator.h>
+#include "handle.h"
 
+using namespace std;
 
 /* Recursive implementation of the fibonacci algorithm (in a helper function) */
 static jlong fib(jlong n) {
@@ -20,6 +24,10 @@ JNIEXPORT jlong JNICALL Java_com_tomek_voicecalculator_calculator_CalculatorLib_
     __android_log_print(ANDROID_LOG_DEBUG, "CalculatorLib.c", "fibNR(%lld)", n);
     return fib(n);
 }
+
+
+
+
 
 
 

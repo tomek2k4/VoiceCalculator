@@ -46,6 +46,8 @@ private:
 
 	void calculate();
 
+	void clearStream(std::stringstream *);
+
 	std::stringstream *output;
 	std::stringstream *acc;
 	std::stringstream *arg;
