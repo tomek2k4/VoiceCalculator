@@ -21,7 +21,7 @@ Calculator::Calculator():oper('0'),state(ON)
 {
 	output = new stringstream();
 	arg = new stringstream();
-	*output<<'0';
+	*output<<"0";
 }
 
 string Calculator::getOutput()

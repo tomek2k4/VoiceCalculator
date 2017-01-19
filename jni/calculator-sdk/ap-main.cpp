@@ -47,6 +47,7 @@ int main(int argc, char **argv)
 //    cout << "10-4=" << c->getOutput()<< endl;
 	  c->enter("1+3*2=");
 	  cout << "1+3*2=" << c->getOutput()<< endl;
+	  printf("output=%s\n",c->getOutput().c_str());
 
     delete c;
 
