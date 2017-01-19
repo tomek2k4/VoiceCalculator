@@ -86,7 +86,6 @@ void Calculator::enterINP(char c)
 
 void Calculator::enterOPER(char c)
 {
-	//cout << "Entering OPER with c="<<c<<endl;
     if (iswdigit(c)) {
         *arg<<c;
 		clearStream(output);
@@ -104,7 +103,6 @@ void Calculator::enterOPER(char c)
 
 void Calculator::calculate()
 {
-	//cout << "Entering calculate"<<endl;
 	int a,b,result;
 	std::istringstream astringstream(acc->str());
 	astringstream >> a;
@@ -124,7 +122,7 @@ void Calculator::calculate()
 
 	clearStream(output);
     *output << result;
-	clearStream(acc);
+    clearStream(acc);
     *acc << result;
 	clearStream(arg);
     *arg<<"0";
@@ -133,7 +131,7 @@ void Calculator::calculate()
 
 void Calculator::clearStream(stringstream* stream)
 {
-	stream->str( std::string() );
+    stream->str( std::string() );
 	stream->clear();
 }
 

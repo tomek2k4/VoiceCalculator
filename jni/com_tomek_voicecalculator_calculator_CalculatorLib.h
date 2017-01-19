@@ -9,13 +9,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*
- * Class:     com_tomek_voicecalculator_calculator_CalculatorLib
- * Method:    fibNR
- * Signature: (J)J
- */
-JNIEXPORT jlong JNICALL Java_com_tomek_voicecalculator_calculator_CalculatorLib_fibNR
-  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     com_tomek_voicecalculator_calculator_CalculatorLib

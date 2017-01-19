@@ -26,24 +26,15 @@ public class VoiceCalculatorActivity extends Activity {
     
     
     public void onClickGo(View view){
-    	long n = Long.parseLong(input.getText().toString());
-
-    	long resultN = CalculatorLib.fibNR(n);
-    	
-    	output.append(String.format("\nfibJ(%d)=%d",n,resultN));
-    	
-    	String equation = "2*3+5";
-    	
-    	CalculatorLib calcLib = new CalculatorLib();
-    	//output.append(String.format("nativeHandle1=%d",calcLib.nativeHandle));
-    	calcLib.enter(equation);
-    	//output.append(String.format("nativeHandle2=%d",calcLib.nativeHandle));
-    	String wynik = calcLib.getOutput();
-    	//output.append(String.format("nativeHandle3=%d",calcLib.nativeHandle));
-    	
-    	output.append(String.format("\n(%s)=%s",equation,wynik));
-    	
-    	calcLib.dispose();
+    	String expr = input.getText().toString();
+    	if(expr!=null && expr.length()!=0){
+    		expr += "=";
+    		CalculatorLib calcLib = new CalculatorLib();
+    		calcLib.enter(expr);
+    		String result = calcLib.getOutput(); 		
+    		output.append(String.format("\n%s%s",expr,result));
+    		calcLib.dispose();	
+    	}
     	
     }
 

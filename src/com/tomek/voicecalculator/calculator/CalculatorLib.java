@@ -7,8 +7,6 @@ public class CalculatorLib {
 	// handle for c++ pointer
 	private long nativeHandle;
 	
-
-
 	public CalculatorLib(){
 		initialise();
 	};
@@ -20,8 +18,6 @@ public class CalculatorLib {
 	public native void dispose();
 
 	public native void initialise();
-	
-	public native static long fibNR(long n);
 	
     static {
         // as defined by LOCAL_MODULE in Android.mk

@@ -16,8 +16,7 @@
          android:layout_alignParentLeft="true"
          android:layout_alignTop="@+id/go"
          android:layout_toLeftOf="@+id/go"
-         android:ems="10"
-         android:inputType="number" />
+         android:ems="10"/>
     
     <Button
         android:id="@+id/go"
