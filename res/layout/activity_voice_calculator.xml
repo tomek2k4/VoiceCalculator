@@ -16,7 +16,8 @@
          android:layout_alignParentLeft="true"
          android:layout_alignTop="@+id/go"
          android:layout_toLeftOf="@+id/go"
-         android:ems="10"/>
+         android:ems="10"
+         android:editable="false"/>
     
     <Button
         android:id="@+id/go"
