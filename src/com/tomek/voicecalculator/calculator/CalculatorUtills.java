@@ -85,7 +85,7 @@ public class CalculatorUtills {
 			result = "";
 			break;
 		default:
-			result = "0";
+			result = "";
 			break;
 		}
 		return result;
