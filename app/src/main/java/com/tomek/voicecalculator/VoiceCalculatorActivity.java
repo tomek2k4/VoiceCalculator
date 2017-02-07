@@ -76,6 +76,7 @@ public class VoiceCalculatorActivity extends Activity implements OnInitListener 
         
         editTextInput = (EditText)findViewById(R.id.input);
         textViewOutput = (TextView)findViewById(R.id.output);
+
     }
     
     
