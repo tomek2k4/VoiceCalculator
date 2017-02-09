@@ -14,14 +14,20 @@ const string RPNBuilder::VALID_OPERATIONS = LOW_PRIORITY_OPERATIONS + HIGH_PRIOR
 /**
  * Constructor
  */
-RPNBuilder::RPNBuilder():oper('0'),state(ON)
+RPNBuilder::RPNBuilder():oper('0'),state(ON),acc("")
 {
-    output<<string();   //initialize with empty string
 }
 
 string RPNBuilder::getOutput()
 {
-    return output.str();
+    string outStr;
+    while(!output.empty())
+    {
+        outStr+=output.front();
+        outStr+=" ";
+        output.pop();
+    }
+    return outStr;
 }
 
 
@@ -51,7 +57,7 @@ void RPNBuilder::enter(char c)
 void RPNBuilder::enterON(char c)
 {
     if(iswdigit(c)){
-        output<<c;
+        acc+=c;
         state = INP;
     }
 }
@@ -60,17 +66,19 @@ void RPNBuilder::enterINP(char c)
 {
     if(iswdigit(c))
     {
-        output<<c;
+        acc+=c;
         state = INP;
     }
     else if(VALID_OPERATIONS.find(c)!=string::npos)
     {
+        output.push(acc);
+        acc.clear();
         oper = c;
         if(LOW_PRIORITY_OPERATIONS.find(c)!=string::npos)
         {
             while( !operStack.empty() && HIGH_PRIORITY_OPERATIONS.find(operStack.top())!=string::npos )
             {
-                output<<" "<<operStack.top();
+                output.push(string(1,operStack.top()));
                 operStack.pop();
             }
         }
@@ -78,6 +86,8 @@ void RPNBuilder::enterINP(char c)
     }
     else if(c == '=')
     {
+        output.push(acc);
+        acc.clear();
         build();
         state = INP;
     }
@@ -86,7 +96,7 @@ void RPNBuilder::enterINP(char c)
 void RPNBuilder::enterOPER(char c)
 {
     if(iswdigit(c)){
-        output<<" "<<c;
+        acc+=c;
         operStack.push(oper);
         state = INP;
     }
@@ -97,7 +107,7 @@ void RPNBuilder::build()
 {
     while(!operStack.empty())
     {
-        output<<" "<<operStack.top();
+        output.push(string(1,operStack.top()));
         operStack.pop();
     }
 }

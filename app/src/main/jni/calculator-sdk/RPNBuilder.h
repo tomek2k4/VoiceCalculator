@@ -8,6 +8,7 @@
 #include <string>
 #include <sstream>
 #include <stack>
+#include <queue>
 
 class RPNBuilder
 {
@@ -43,10 +44,9 @@ private:
 
     void build();
 
-    void clearStream(std::stringstream *);
-
-    std::stringstream output;
+    std::queue<std::string> output;
     std::stack<char> operStack;
+    std::string acc;
     char oper;
 
     enum State { ON, INP, OPER };
