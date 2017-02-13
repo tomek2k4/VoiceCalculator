@@ -2,7 +2,7 @@
 //************************************************************
 //************************************************************
 //**														**
-//**	Title:		    Calculator Test main				**
+//**	Title:		    SequencialCalculator Test main				**
 //** 	Device / Size:	                					**
 //**	Programmed by:										**
 //**	Copyright (c):	Tomasz Maslon 						**
@@ -13,11 +13,11 @@
 //************************************************************
 
 #include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
 #include <string>
-#include "Calculator.h"
+#include <list>
 #include "RPNBuilder.h"
+#include "ICalculator.h"
+#include "SequencialCalculator.h"
 
 
 //**********************************************************************************************************************************************
@@ -32,53 +32,41 @@ using namespace std;
 
 //***********************************
 //***********************************
-//********** MAIN FUNCTION **********
+//******* TEST MAIN FUNCTION ********
 //***********************************
 //***********************************
 int main(int argc, char **argv)
 {
 	cout << "This is calculator's test main function" << endl;
+	std:list<string> expressionsList;
+	expressionsList.push_back("1+3*2=");
+	expressionsList.push_back("1*3+2=");
+	expressionsList.push_back("11*13+24*54=");
 
-//	Calculator *c = new Calculator();
-//
-//	cout << "Initial output:" << c->getOutput() << endl;
-////    c->enter("2+3=");
-////    cout << "2+3=" << c->getOutput()<< endl;
-////    c->enter("10-4=");
-////    cout << "10-4=" << c->getOutput()<< endl;
-//	  c->enter("1+3*2=");
-//	  cout << "1+3*2=" << c->getOutput()<< endl;
-//	  printf("output=%s\n",c->getOutput().c_str());
-//
-//    delete c;
 
-	std::string expression;
+	string expression;
+
+	for (std::list<string>::iterator it=expressionsList.begin(); it != expressionsList.end(); ++it)
 	{
 		RPNBuilder rpnBuilder;
 		cout << "Initial output:" <<rpnBuilder.getOutput()<<endl;
-		expression = "1+3*2=";
+		expression = *it;
 		rpnBuilder.enter(expression);
-		cout << expression << " is \"" << rpnBuilder.getOutput()<<"\" in reverse polish notation"<<endl;
+		cout << expression << " is " << rpnBuilder.getOutput()<<" in reverse polish notation"<<endl;
 	}
 
+	ICalculator *calc = new SequencialCalculator();
+	for (std::list<string>::iterator it=expressionsList.begin(); it != expressionsList.end(); ++it)
 	{
-		RPNBuilder rpnBuilder;
-		cout << "Initial output:" <<rpnBuilder.getOutput()<<endl;
-		expression = "1*3+2=";
-		rpnBuilder.enter(expression);
-		cout << expression << " is \"" << rpnBuilder.getOutput() <<"\" in reverse polish notation" << endl;
-	}
-
-	{
-		RPNBuilder rpnBuilder;
-		cout << "Initial output:" <<rpnBuilder.getOutput()<<endl;
-		expression = "11*13+24*54=";
-		rpnBuilder.enter(expression);
-		cout << expression << " is \"" << rpnBuilder.getOutput() <<"\" in reverse polish notation" << endl;
+		calc->clear();
+		cout << "Initial calc output:" <<calc->getOutput()<<endl;
+		expression = *it;
+		calc->enter(expression);
+		cout << expression << " is " << calc->getOutput()<<endl;
 	}
 
 
-
+	delete calc;
 	return 0;
 }
 

@@ -3,10 +3,10 @@
 #Change output_file_name.a below to your desired executible filename
 
 #Set all your object files (the object files of all the .c files in your project, e.g. main.o my_sub_functions.o )
-OBJ = ap-main.o Calculator.o RPNBuilder.o
+OBJ = calculator_test.o SequencialCalculator.o RPNBuilder.o
 
 #Set any dependant header files so that if they are edited they cause a complete re-compile (e.g. main.h some_subfunctions.h some_definitions_file.h ), or leave blank
-DEPS = Calculator.h RPNBuilder.h
+DEPS = SequencialCalculator.h RPNBuilder.h
 
 #Any special libraries you are using in your project (e.g.  `pkg-config --libs gtk+-3.0` ), or leave blank
 LIBS = 

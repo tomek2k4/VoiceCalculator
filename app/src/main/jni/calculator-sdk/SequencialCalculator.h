@@ -9,13 +9,16 @@
 #define CALCULATOR_H_
 
 
-class Calculator
+#include <queue>
+#include <list>
+
+class SequencialCalculator : public ICalculator
 {
 public:
 	/*
 	 * Constructor
 	 */
-	Calculator();
+	SequencialCalculator();
 
 
 	/*
@@ -29,9 +32,14 @@ public:
 	void enter(std::string);
 
 	/*
+ 	* Clear output
+ 	*/
+	void clear();
+
+	/*
 	 * Destructor
 	 */
-	~Calculator();
+	~SequencialCalculator();
 
 
 
@@ -46,11 +54,9 @@ private:
 
 	void calculate();
 
-	void clearStream(std::stringstream *);
-
-	std::stringstream *output;
-	std::stringstream *acc;
-	std::stringstream *arg;
+	std::string output;
+	std::string acc;
+	std::string arg;
 	char oper;
 
 	enum State { ON, INP, OPER };
