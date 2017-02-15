@@ -12,7 +12,7 @@ extern "C" {
 
 /*
  * Class:     com_tomek_voicecalculator_calculator_CalculatorLib
- * Method:    getOutput
+ * Method:    str
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_com_tomek_voicecalculator_calculator_CalculatorLib_getOutput

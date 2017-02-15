@@ -18,18 +18,10 @@ RPNBuilder::RPNBuilder():oper('0'),state(ON),acc("")
 {
 }
 
-string RPNBuilder::getOutput()
+queue<string> RPNBuilder::getOutput()
 {
-    string outStr;
-    while(!output.empty())
-    {
-        outStr+=output.front();
-        outStr+=" ";
-        output.pop();
-    }
-    return outStr;
+    return output;
 }
-
 
 void RPNBuilder::enter(string expr)
 {
@@ -37,7 +29,6 @@ void RPNBuilder::enter(string expr)
         enter(expr.at(k));
     }
 }
-
 
 void RPNBuilder::enter(char c)
 {
@@ -52,6 +43,12 @@ void RPNBuilder::enter(char c)
             enterOPER(c);
             break;
     }
+}
+
+void RPNBuilder::clear()
+{
+    queue<string> empty;
+    std::swap( output, empty );
 }
 
 void RPNBuilder::enterON(char c)
@@ -110,6 +107,11 @@ void RPNBuilder::build()
         output.push(string(1,operStack.top()));
         operStack.pop();
     }
+}
+
+string RPNBuilder::getValidOperations()
+{
+    return VALID_OPERATIONS;
 }
 
 /**

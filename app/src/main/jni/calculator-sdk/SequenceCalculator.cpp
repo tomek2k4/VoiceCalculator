@@ -8,26 +8,26 @@
 #include <sstream>
 #include <iostream>
 #include "ICalculator.h"
-#include "SequencialCalculator.h"
+#include "SequenceCalculator.h"
 
 using namespace std;
 
-const string SequencialCalculator::VALID_OPERATIONS = "+-*";
+const string SequenceCalculator::VALID_OPERATIONS = "+-*";
 
 /**
  * Constructor
  */
-SequencialCalculator::SequencialCalculator():oper('0'),state(ON)
+SequenceCalculator::SequenceCalculator():oper('0'),state(ON)
 {
 	output="0";
 }
 
-string SequencialCalculator::getOutput()
+string SequenceCalculator::getOutput()
 {
 	return output;
 }
 
-void SequencialCalculator::enter(string expr)
+void SequenceCalculator::enter(string expr)
 {
 	for(int k=0; k < expr.length(); k++)
 	{
@@ -35,7 +35,7 @@ void SequencialCalculator::enter(string expr)
 	}
 }
 
-void SequencialCalculator::enter(char c)
+void SequenceCalculator::enter(char c)
 {
 	switch (state) {
 		case ON:
@@ -50,7 +50,7 @@ void SequencialCalculator::enter(char c)
 	}
 }
 
-void SequencialCalculator::clear()
+void SequenceCalculator::clear()
 {
 
 	output.clear();
@@ -63,7 +63,7 @@ void SequencialCalculator::clear()
 
 
 
-void SequencialCalculator::enterON(char c)
+void SequenceCalculator::enterON(char c)
 {
 	if(iswdigit(c))
 	{
@@ -73,7 +73,7 @@ void SequencialCalculator::enterON(char c)
 	}
 }
 
-void SequencialCalculator::enterINP(char c)
+void SequenceCalculator::enterINP(char c)
 {
 	if(iswdigit(c))
 	{
@@ -93,7 +93,7 @@ void SequencialCalculator::enterINP(char c)
 	}
 }
 
-void SequencialCalculator::enterOPER(char c)
+void SequenceCalculator::enterOPER(char c)
 {
     if (iswdigit(c)) {
         arg+=c;
@@ -109,24 +109,15 @@ void SequencialCalculator::enterOPER(char c)
     }
 }
 
-void SequencialCalculator::calculate()
+void SequenceCalculator::calculate()
 {
 	int a,b,result;
 	std::istringstream astringstream(acc);
 	astringstream >> a;
 	std::istringstream bstringstream(arg);
 	bstringstream >> b;
-	switch (oper) {
-		case '+':
-			result = a + b;
-			break;
-		case '-':
-			result = a - b;
-			break;
-		case '*':
-			result = a * b;
-			break;
-	}
+
+	result = ICalculator::calculate(a,b,oper);
 
 	stringstream out;
 	out<<result;
@@ -143,7 +134,7 @@ void SequencialCalculator::calculate()
 /**
  * Destructor
  */
-SequencialCalculator::~SequencialCalculator()
+SequenceCalculator::~SequenceCalculator()
 {
 }
 

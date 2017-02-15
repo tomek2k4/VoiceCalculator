@@ -9,6 +9,7 @@
 #include <sstream>
 #include <stack>
 #include <queue>
+#include <list>
 
 class RPNBuilder
 {
@@ -18,15 +19,21 @@ public:
      */
     RPNBuilder();
 
+
     /*
-     * Gets the output of calculator
-     */
-    std::string getOutput();
+    * Gets the output of builder as string queue
+    */
+    std::queue<std::string> getOutput();
+
 
     /*
      * entry point for equation
      */
     void enter(std::string);
+
+    void clear();
+
+    static std::string getValidOperations();
 
     /*
      * Destructor
@@ -56,7 +63,6 @@ private:
     static const std::string VALID_OPERATIONS;
     static const std::string HIGH_PRIORITY_OPERATIONS;
     static const std::string LOW_PRIORITY_OPERATIONS;
-
 
 };
 

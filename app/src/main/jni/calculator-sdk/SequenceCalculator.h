@@ -11,14 +11,15 @@
 
 #include <queue>
 #include <list>
+#include "ICalculator.h"
 
-class SequencialCalculator : public ICalculator
+class SequenceCalculator : public ICalculator
 {
 public:
 	/*
 	 * Constructor
 	 */
-	SequencialCalculator();
+	SequenceCalculator();
 
 
 	/*
@@ -39,7 +40,7 @@ public:
 	/*
 	 * Destructor
 	 */
-	~SequencialCalculator();
+	~SequenceCalculator();
 
 
 

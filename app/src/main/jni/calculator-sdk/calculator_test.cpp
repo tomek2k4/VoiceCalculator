@@ -2,7 +2,7 @@
 //************************************************************
 //************************************************************
 //**														**
-//**	Title:		    SequencialCalculator Test main				**
+//**	Title:  SequenceCalculator Test main	    		**
 //** 	Device / Size:	                					**
 //**	Programmed by:										**
 //**	Copyright (c):	Tomasz Maslon 						**
@@ -17,7 +17,8 @@
 #include <list>
 #include "RPNBuilder.h"
 #include "ICalculator.h"
-#include "SequencialCalculator.h"
+#include "SequenceCalculator.h"
+#include "RPNCalculator.h"
 
 
 //**********************************************************************************************************************************************
@@ -29,6 +30,23 @@
 //**********************************************************************************************************************************************
 
 using namespace std;
+
+string rpnBuilderOutputToString(queue<string> rpnOutput)
+{
+	string prefix = "";
+	string outStr;
+	while(!rpnOutput.empty())
+	{
+		outStr+=prefix;
+		outStr+=rpnOutput.front();
+		prefix = " ";
+		rpnOutput.pop();
+	}
+	return outStr;
+}
+
+
+
 
 //***********************************
 //***********************************
@@ -42,31 +60,44 @@ int main(int argc, char **argv)
 	expressionsList.push_back("1+3*2=");
 	expressionsList.push_back("1*3+2=");
 	expressionsList.push_back("11*13+24*54=");
+	expressionsList.push_back("2^3=");
 
 
 	string expression;
-
+	cout<< "******************"<<" RPN builder test:"<< "******************"<<endl;
 	for (std::list<string>::iterator it=expressionsList.begin(); it != expressionsList.end(); ++it)
 	{
 		RPNBuilder rpnBuilder;
-		cout << "Initial output:" <<rpnBuilder.getOutput()<<endl;
+		cout << "Initial output:" << rpnBuilderOutputToString(rpnBuilder.getOutput())<<endl;
 		expression = *it;
 		rpnBuilder.enter(expression);
-		cout << expression << " is " << rpnBuilder.getOutput()<<" in reverse polish notation"<<endl;
+		cout << expression << " is " << rpnBuilderOutputToString(rpnBuilder.getOutput())<<" in reverse polish notation"<<endl;
 	}
 
-	ICalculator *calc = new SequencialCalculator();
+	cout<< "******************"<<" Sequential calcualtor test:"<< "******************"<<endl;
+	ICalculator *calc = new SequenceCalculator();
 	for (std::list<string>::iterator it=expressionsList.begin(); it != expressionsList.end(); ++it)
 	{
 		calc->clear();
 		cout << "Initial calc output:" <<calc->getOutput()<<endl;
 		expression = *it;
 		calc->enter(expression);
-		cout << expression << " is " << calc->getOutput()<<endl;
+		cout << expression << calc->getOutput()<<endl;
 	}
-
-
 	delete calc;
+
+	cout<< "******************"<<" Reverse Polish Notation calcualtor test:"<< "******************"<<endl;
+	calc = new RPNCalculator();
+	for (std::list<string>::iterator it=expressionsList.begin(); it != expressionsList.end(); ++it)
+	{
+		calc->clear();
+		cout << "Initial calc output:" <<calc->getOutput()<<endl;
+		expression = *it;
+		calc->enter(expression);
+		cout << expression << calc->getOutput()<<endl;
+	}
+	delete calc;
+
 	return 0;
 }
 
