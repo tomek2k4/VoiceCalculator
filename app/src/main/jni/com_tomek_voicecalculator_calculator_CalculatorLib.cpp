@@ -10,6 +10,7 @@
 #include <string>
 #include <sstream>
 #include <calculator-sdk/SequenceCalculator.h>
+#include <calculator-sdk/RPNCalculator.h>
 #include "handle.h"
 
 using namespace std;
@@ -17,9 +18,9 @@ using namespace std;
 void
 Java_com_tomek_voicecalculator_calculator_CalculatorLib_initialise(JNIEnv *env, jobject obj)
 {
-    SequenceCalculator *inst;
+    ICalculator *inst;
     //__android_log_print(ANDROID_LOG_DEBUG, "CalculatorLib.c", "initialise;inst0=%ld", (long)inst);
-    inst = new SequenceCalculator();
+    inst = new RPNCalculator();
     setHandle(env, obj, inst);
 }
 
@@ -27,7 +28,7 @@ void
 Java_com_tomek_voicecalculator_calculator_CalculatorLib_enter(JNIEnv *env, jobject obj,
                              jstring expr)
 {
-    SequenceCalculator *inst = getHandle<SequenceCalculator>(env, obj);
+    ICalculator *inst = getHandle<ICalculator>(env, obj);
     const char *kstr = env->GetStringUTFChars(expr, 0);
     inst->enter(string(kstr));
     env->ReleaseStringUTFChars(expr, kstr);
@@ -36,8 +37,9 @@ Java_com_tomek_voicecalculator_calculator_CalculatorLib_enter(JNIEnv *env, jobje
 jstring
 Java_com_tomek_voicecalculator_calculator_CalculatorLib_getOutput(JNIEnv *env, jobject obj)
 {
-    SequenceCalculator *inst = getHandle<SequenceCalculator>(env, obj);
+    ICalculator *inst = getHandle<ICalculator>(env, obj);
     const char *kstr = inst->getOutput().c_str();
+    inst->clear();
     return env->NewStringUTF(kstr);
 }
 
@@ -45,7 +47,7 @@ Java_com_tomek_voicecalculator_calculator_CalculatorLib_getOutput(JNIEnv *env, j
 void
 Java_com_tomek_voicecalculator_calculator_CalculatorLib_dispose(JNIEnv *env, jobject obj)
 {
-    SequenceCalculator *inst = getHandle<SequenceCalculator>(env, obj);
+    ICalculator *inst = getHandle<ICalculator>(env, obj);
     setHandle(env, obj, (void*)0);
     delete inst;
 }

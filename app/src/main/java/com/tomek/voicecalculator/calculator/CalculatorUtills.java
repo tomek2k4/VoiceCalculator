@@ -5,15 +5,15 @@ public class CalculatorUtills {
 	private final static String WHITESPACE_REGEX = "\\s+";
 	private final static String NUMERIC_REGEX = "\\d+";
 	
-	public static String prepareExpression(String input){
+	public static String prepareExpressionForCalculation(String input){
 		
-		String expresion = transform(input);
+		String expresion = transformSpokenEquationToInfixExpression(input);
 		expresion += "=";
 		
 		return expresion;
 	}
 
-	private static String transform(String inp){
+	private static String transformSpokenEquationToInfixExpression(String inp){
 		String[] splitStr = inp.split(WHITESPACE_REGEX);
 		StringBuilder strBuilder = new StringBuilder();
 		for(String word:splitStr){

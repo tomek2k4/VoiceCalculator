@@ -46,8 +46,6 @@ string rpnBuilderOutputToString(queue<string> rpnOutput)
 }
 
 
-
-
 //***********************************
 //***********************************
 //******* TEST MAIN FUNCTION ********
@@ -60,7 +58,7 @@ int main(int argc, char **argv)
 	expressionsList.push_back("1+3*2=");
 	expressionsList.push_back("1*3+2=");
 	expressionsList.push_back("11*13+24*54=");
-	expressionsList.push_back("2^3=");
+	expressionsList.push_back("2+2*4-5=");
 
 
 	string expression;

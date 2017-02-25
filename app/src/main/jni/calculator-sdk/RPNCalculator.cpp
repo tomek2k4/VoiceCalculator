@@ -46,9 +46,9 @@ void RPNCalculator::calculate() {
         } else {
             if (validOper.find(lit) != string::npos) {
                 //cout<<" is valid operand";
-                a = equationStack.top();
-                equationStack.pop();
                 b = equationStack.top();
+                equationStack.pop();
+                a = equationStack.top();
                 equationStack.pop();
                 result = ICalculator::calculate(a, b, lit.at(0));
                 //cout <<" calculate: "<<a<<lit<<b<<" is "<<result;

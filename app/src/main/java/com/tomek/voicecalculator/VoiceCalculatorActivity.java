@@ -9,8 +9,8 @@ import com.tomek.voicecalculator.calculator.CalculatorUtills;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
@@ -25,50 +25,18 @@ import android.widget.Toast;
 public class VoiceCalculatorActivity extends Activity implements OnInitListener {
 
 	private final static String TAG = "VoiceCalculatorActivity";
-	
+
 	private final int SPEECH_RECOGNITION_CODE = 1;
 	private final int SPEECH_SYNTHESIS_CODE = 2;
-	
-	private static final int CALCULATED_EXPRESSION_FINISHED_ID = 1;
-	private static final int SPEECH_INPUT_FINISHED_ID = 2;
-	private static final int ERROR_OCCURED_ID = 4;
-	
+
+	private String resultToSpeak;
+
 	EditText editTextInput;
 	TextView textViewOutput;
 
-	private String result;
-	
-	TextToSpeech tts;
+	TextToSpeech tts = null;
+	CalculatorLib calcLib = null;
 
-	
-    private final Handler voiceCalculatorResponseHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            Log.d(TAG, "Received message on thread: " +
-                    Long.valueOf(Thread.currentThread().getId()).toString());
-
-            String handledString;
-            switch (msg.what) {
-            	case SPEECH_INPUT_FINISHED_ID:
-            		handledString = (String) msg.obj;
-            		editTextInput.setText(handledString);
-            		formatAndCalculate(handledString);
-            		break;
-                case CALCULATED_EXPRESSION_FINISHED_ID:
-                    Equation equation = (Equation) msg.obj;
-   		    	 	textViewOutput.append(String.format("\n%s%s",equation.getExpression(),equation.getResult()));
-   		    	 	result = equation.getResult();
-   		    	 	startTextToSpeech();
-                    break;
-                case ERROR_OCCURED_ID:
-                	handledString = (String)msg.obj;
-                	Log.e(TAG,"Error: " + handledString);
-                	break;
-            }
-        }
-    };
-	
-	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +45,8 @@ public class VoiceCalculatorActivity extends Activity implements OnInitListener 
         editTextInput = (EditText)findViewById(R.id.input);
         textViewOutput = (TextView)findViewById(R.id.output);
 
+		tts = new TextToSpeech(this, this);
+		calcLib = new CalculatorLib();
     }
     
     
@@ -99,17 +69,15 @@ public class VoiceCalculatorActivity extends Activity implements OnInitListener 
 			 startActivityForResult(intent, SPEECH_RECOGNITION_CODE);
 		 } catch (ActivityNotFoundException a) {
 			 Toast.makeText(getApplicationContext(),
-					"Sorry! Speech recognition is not supported in this device.",
+					"Sorry! Speech recognition is not supported on this device.",
 					Toast.LENGTH_SHORT).show();
 		}
 	 }
 
-	 
 	/**
 	 * Start speech to text intent. This opens up Google Speech Recognition API dialog box to listen the speech input.
 	 * */
 	 private void startTextToSpeech() {
-		 tts = new TextToSpeech(this, this);
 		 Intent intent = new Intent();
 		 intent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 		 try {
@@ -136,57 +104,24 @@ public class VoiceCalculatorActivity extends Activity implements OnInitListener 
 				 ArrayList<String> result = data
 						 .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 				 String text = result.get(0);
-				 
-		         message = voiceCalculatorResponseHandler
-		                    .obtainMessage(SPEECH_INPUT_FINISHED_ID,text);
-		         voiceCalculatorResponseHandler.sendMessage(message);
+
+				 // Execute Async Task
+				 new FormatTextAndCalculateTask().execute(text);
 			 }else{
-		         message = voiceCalculatorResponseHandler
-		                    .obtainMessage(ERROR_OCCURED_ID,"Speech recognition failed");
-		         voiceCalculatorResponseHandler.sendMessage(message);
+				 Log.e(TAG,"Error: " + "Speech recognition failed");
 			 }
 			 break;
 		 }
 		 case SPEECH_SYNTHESIS_CODE:{
 			 if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-				 tts.speak("Equals "+result, TextToSpeech.QUEUE_FLUSH, null);
+				 tts.speak("Equals "+ resultToSpeak, TextToSpeech.QUEUE_FLUSH, null);
 		     }else{
-		         message = voiceCalculatorResponseHandler
-		                    .obtainMessage(ERROR_OCCURED_ID,"TTS data are missing");
-		         voiceCalculatorResponseHandler.sendMessage(message);
+				 Log.e(TAG,"Error: " + "TTS data are missing");
 		     }
 		 }
 		 break;
 		 }
 	 }
-
-	 private void formatAndCalculate(String text){
-		 final String textFinal = text;
-		 
-		 new Thread(){
-			 public void run(){
-				 String expression = CalculatorUtills.prepareExpression(textFinal);
-				 String result = "";
-				 if(expression!=null && expression.length()!=0){
-					 CalculatorLib calcLib = new CalculatorLib();
-					 calcLib.enter(expression);
-					 result = calcLib.getOutput(); 		
-					 calcLib.dispose();
-					 
-					 Equation equation = new Equation(expression, result);
-					 
-			         Message message = voiceCalculatorResponseHandler
-			                    .obtainMessage(CALCULATED_EXPRESSION_FINISHED_ID,equation);
-			         voiceCalculatorResponseHandler.sendMessage(message);
-				 }else{
-			         Message message = voiceCalculatorResponseHandler
-			                    .obtainMessage(ERROR_OCCURED_ID,"expression could not be obtained");
-			         voiceCalculatorResponseHandler.sendMessage(message);
-				 }
-			 } 
-		 }.start();
-	 }
-
 
 	@Override
 	public void onInit(int status) {
@@ -214,6 +149,43 @@ public class VoiceCalculatorActivity extends Activity implements OnInitListener 
 		}
 		
 	}
-	
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		tts.shutdown();
+		calcLib.dispose();
+	}
+
+
+	private class FormatTextAndCalculateTask extends AsyncTask<String, Integer, Equation> {
+
+		@Override
+		protected Equation doInBackground(String... spokenTexts) {
+			String spokenText = spokenTexts[0];
+
+			Equation equation;
+
+			String expression = CalculatorUtills.prepareExpressionForCalculation(spokenText);
+			String result = "";
+			if(expression!=null && expression.length()!=0){
+				calcLib.enter(expression);
+				// Save resultToSpeak in String after that native calc's output is cleared
+				result = calcLib.getOutput();
+				equation = new Equation(expression, result);
+			}else{
+				equation = new Equation("","0");
+			}
+			return equation;
+		}
+
+		@Override
+		protected void onPostExecute(Equation equation) {
+			textViewOutput.append(String.format("\n%s%s",equation.getExpression(),equation.getResult()));
+			resultToSpeak = equation.getResult();
+			startTextToSpeech();
+		}
+	}
+
 
 }
